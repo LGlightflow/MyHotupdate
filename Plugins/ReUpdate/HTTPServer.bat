@@ -1,0 +1,1 @@
+start Engine\Binaries\Win64\HotUpdateServer.exe -log -IP=127.0.0.1 -Port=8998
