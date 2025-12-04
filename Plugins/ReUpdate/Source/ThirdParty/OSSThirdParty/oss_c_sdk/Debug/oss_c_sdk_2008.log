@@ -1,0 +1,21 @@
+﻿cl : 命令行  warning D9035: “Gm”选项已否决，并将在将来的版本中移除
+  oss_xml.c
+  oss_util.c
+  oss_resumable.c
+  oss_object.c
+  oss_multipart.c
+  oss_live.c
+  oss_define.c
+  oss_bucket.c
+  oss_auth.c
+  aos_util.c
+  aos_transport.c
+  aos_string.c
+  aos_status.c
+  aos_log.c
+  aos_http_io.c
+  aos_fstack.c
+  aos_crc64.c
+  aos_buf.c
+  正在生成代码...
+  oss_c_sdk_2008.vcxproj -> D:\UnrealEngine-5.3\Engine\Plugins\RENZHAI_PLUGIN\SimpleOSS\Source\ThirdParty\OSSThirdParty\oss_c_sdk\Debug\oss_c_sdk.lib

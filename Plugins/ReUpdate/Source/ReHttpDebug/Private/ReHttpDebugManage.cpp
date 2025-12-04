@@ -1,4 +1,4 @@
-#include "ReHttpDebugManage.h"
+﻿#include "ReHttpDebugManage.h"
 #include "Json/ReHttpDebugJson.h"
 #include "Misc/Base64.h"
 
@@ -51,7 +51,7 @@ bool FReHttpDebugManage::Init(const FHotHttpDebugFileInfo& InFileInfo)
 		TEXT(""),
 		TArray<uint8>(),
 		TMap<FString, FString>(),
-		ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_POST,
+		REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_POST,
 		[&](FHttpRequestPtr InRequest, FHttpResponsePtr InResponse, bool bSuccess)
 		{
 			if (bSuccess)
@@ -101,7 +101,7 @@ bool FReHttpDebugManage::ProtocolLock(const FHotHttpDebugFileInfo& InFileInfo, E
 		TEXT(""),
 		TArray<uint8>(),
 		TMap<FString, FString>(),
-		ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_POST,
+		REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_POST,
 		[&](FHttpRequestPtr InRequest, FHttpResponsePtr InResponse, bool bSuccess)
 		{
 			if (bSuccess)
@@ -130,7 +130,7 @@ FString FReHttpDebugManage::GetHTTPServerVersion(const FHotHttpDebugFileInfo& In
 		TEXT(""),
 		TArray<uint8>(),
 		TMap<FString, FString>(),
-		ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_GET,
+		REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_GET,
 		[&](FHttpRequestPtr InRequest, FHttpResponsePtr InResponse, bool bSuccess)
 		{
 			if (bSuccess)
@@ -158,7 +158,7 @@ bool FReHttpDebugManage::PutServerVersion(const FHotHttpDebugFileInfo& InFileInf
 		ServerVersionJson,
 		TArray<uint8>(),
 		TMap<FString, FString>(),
-		ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_PUT,
+		REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_PUT,
 		[&](FHttpRequestPtr InRequest, FHttpResponsePtr InResponse, bool bSuccess)
 		{
 			if (bSuccess)
@@ -174,7 +174,7 @@ bool FReHttpDebugManage::PutServerVersion(const FHotHttpDebugFileInfo& InFileInf
 bool FReHttpDebugManage::PutServerVersion(const FHotHttpDebugFileInfo& InFileInfo, const FVersion& ServerVersion)
 {
 	FString JsonString;
-	SimpleVersionControl::Save(ServerVersion, JsonString);
+	ReVersionControl::Save(ServerVersion, JsonString);
 
 	return PutServerVersion(InFileInfo, JsonString);
 }
@@ -244,7 +244,7 @@ bool FReHttpDebugManage::Upload_Inner(const FReHttpDebugManage::FInnerQueue& InQ
 		TEXT(""),
 		DataToSend,
 		InCustomMetadataHeader,
-		ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_POST,
+		REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_POST,
 		[&](FHttpRequestPtr InRequest, FHttpResponsePtr InResponse, bool bSuccess)
 		{
 			if (bSuccess)
@@ -269,7 +269,7 @@ int64 FReHttpDebugManage::GetFileSize(const FString& InURL)
 		TEXT(""),
 		TArray<uint8>(),
 		TMap<FString, FString>(),
-		ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_GET,
+		REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_GET,
 		[&](FHttpRequestPtr InRequest, FHttpResponsePtr InResponse, bool bSuccess)
 		{
 			if (bSuccess)
@@ -293,7 +293,7 @@ TArray<uint8> FReHttpDebugManage::DownloadChunk(const FString& InURL, int64 Star
 		TEXT(""),
 		TArray<uint8>(),
 		InCustomMetadataHeader,
-		ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_GET,
+		REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_GET,
 		[&](FHttpRequestPtr InRequest, FHttpResponsePtr InResponse, bool bSuccess)
 		{
 			if (bSuccess)
@@ -316,17 +316,17 @@ void FReHttpDebugManage::SynchronousRequest(
 	const FString& InBody,
 	const TArray<uint8>& InBytes,
 	const TMap<FString, FString>& InCustomMetadataHeader,
-	ReHttpDebugHTTP::EHTTPVerbType InType,
+	REHTTPDEBUGHTTP::EHTTPVerbType InType,
 	TFunction<void(FHttpRequestPtr, FHttpResponsePtr, bool)> InFunc)
 {
-	ReHttpDebugHTTP::FHTTPDelegate InDelegate;
+	REHTTPDEBUGHTTP::FHTTPDelegate InDelegate;
 	InDelegate.SimpleCompleteDelegate.BindLambda(
 	[&](FHttpRequestPtr HttpRequest, FHttpResponsePtr HttpResponse, bool bSucceeded)
 	{
 		InFunc(HttpRequest, HttpResponse, bSucceeded);
 	});
 
-	TSharedPtr<ReHttpDebugHTTP::FHTTP> TmpHTTP = ReHttpDebugHTTP::FHTTP::CreateHTTPObject(InDelegate);
+	TSharedPtr<REHTTPDEBUGHTTP::FHTTP> TmpHTTP = REHTTPDEBUGHTTP::FHTTP::CreateHTTPObject(InDelegate);
 
 	if (InBytes.Num() > 0)
 	{

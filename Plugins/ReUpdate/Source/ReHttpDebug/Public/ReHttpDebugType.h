@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "ReHttpDebugType.generated.h"
@@ -12,7 +12,7 @@ enum class EHTTPObjectStorageProtocol :uint8
 };
 
 USTRUCT(BlueprintType)
-struct ReHttpDEBUG_API FHotHttpDebugFileInfo
+struct REHTTPDEBUG_API FHotHttpDebugFileInfo
 {
 	GENERATED_USTRUCT_BODY()
 

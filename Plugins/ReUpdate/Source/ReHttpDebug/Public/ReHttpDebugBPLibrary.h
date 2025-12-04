@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -23,7 +23,7 @@
 *	https://wiki.unrealengine.com/Custom_Blueprint_Node_Creation
 */
 UCLASS()
-class ReHttpDEBUG_API UReHttpDebugBPLibrary : public UObject
+class REHTTPDEBUG_API UReHttpDebugBPLibrary : public UObject
 {
 	GENERATED_UCLASS_BODY()
 	

@@ -1,0 +1,19 @@
+﻿  aos_buf.c
+  aos_crc64.c
+  aos_fstack.c
+  aos_http_io.c
+  aos_log.c
+  aos_status.c
+  aos_string.c
+  aos_transport.c
+  aos_util.c
+  oss_auth.c
+  oss_bucket.c
+  oss_define.c
+  oss_live.c
+  oss_multipart.c
+  oss_object.c
+  oss_resumable.c
+  oss_util.c
+  oss_xml.c
+  oss_c_sdk_2008.vcxproj -> D:\UnrealEngine-5.3\Engine\Plugins\RENZHAI_PLUGIN\SimpleOSS\Source\ThirdParty\OSSThirdParty\oss_c_sdk\Release\oss_c_sdk.lib

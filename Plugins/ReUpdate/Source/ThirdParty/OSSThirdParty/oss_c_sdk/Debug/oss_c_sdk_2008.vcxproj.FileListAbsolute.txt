@@ -1,0 +1,1 @@
+D:\UnrealEngine-5.3\Engine\Plugins\RENZHAI_PLUGIN\SimpleOSS\Source\ThirdParty\OSSThirdParty\oss_c_sdk\Debug\oss_c_sdk.lib

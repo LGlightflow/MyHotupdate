@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include "CoreMinimal.h"
 #include "HTTP/ReHttpDebugHttp.h"
-#include "Version/SimpleVersion.h"
+#include "Version/ReVersion.h"
 #include "ReHttpDebugType.h"
 
-class ReHttpDEBUG_API FReHttpDebugManage
+class REHTTPDEBUG_API FReHttpDebugManage
 {
 public:
 	FReHttpDebugManage();
@@ -62,7 +62,7 @@ protected:
 		const FString& InBody,
 		const TArray<uint8>& InBytes,
 		const TMap<FString, FString>& InCustomMetadataHeader,
-		ReHttpDebugHTTP::EHTTPVerbType InType,
+		REHTTPDEBUGHTTP::EHTTPVerbType InType,
 		TFunction<void(FHttpRequestPtr, FHttpResponsePtr, bool)> InFunc);
 
 protected:

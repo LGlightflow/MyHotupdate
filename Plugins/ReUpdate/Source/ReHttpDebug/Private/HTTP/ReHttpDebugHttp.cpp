@@ -1,7 +1,7 @@
-#include "HTTP/ReHttpDebugHttp.h"
+﻿#include "HTTP/ReHttpDebugHttp.h"
 #include "HttpManager.h"
 
-namespace ReHttpDebugHTTP
+namespace REHTTPDEBUGHTTP
 {
 	void FHTTP::CancelRequest(const FGuid& InRequestID)
 	{
@@ -25,7 +25,7 @@ namespace ReHttpDebugHTTP
 
 	TSharedPtr<FHTTP> FHTTP::CreateHTTPObject(FHTTPDelegate InDelegate)
 	{
-		return MakeShareable(new ReHttpDebugHTTP::FHTTP(InDelegate));
+		return MakeShareable(new REHTTPDEBUGHTTP::FHTTP(InDelegate));
 	}
 
 	FGuid FHTTP::Request(
@@ -33,7 +33,7 @@ namespace ReHttpDebugHTTP
 		const FString& InContent,//xml json
 		const TMap<FString, FString>& InCustomMetadataHeader,
 		bool bSynchronous,
-		ReHttpDebugHTTP::EHTTPVerbType VerbType)
+		REHTTPDEBUGHTTP::EHTTPVerbType VerbType)
 	{
 		return Request(InURL, InContent, TArray<uint8>(), InCustomMetadataHeader, bSynchronous, VerbType);
 	}
@@ -43,7 +43,7 @@ namespace ReHttpDebugHTTP
 		const TArray<uint8>& InBytes,
 		const TMap<FString, FString>& InCustomMetadataHeader,
 		bool bSynchronous,
-		ReHttpDebugHTTP::EHTTPVerbType VerbType)
+		REHTTPDEBUGHTTP::EHTTPVerbType VerbType)
 	{
 		return Request(InURL, TEXT(""), InBytes, InCustomMetadataHeader, bSynchronous, VerbType);
 	}
@@ -54,7 +54,7 @@ namespace ReHttpDebugHTTP
 		const TArray<uint8>& InBytes,
 		const TMap<FString, FString>& InCustomMetadataHeader,
 		bool bSynchronous,
-		ReHttpDebugHTTP::EHTTPVerbType VerbType)
+		REHTTPDEBUGHTTP::EHTTPVerbType VerbType)
 	{
 		FGuid RequestID = FGuid::NewGuid();
 
@@ -70,7 +70,7 @@ namespace ReHttpDebugHTTP
 			Request->SetHeader(Tmp.Key, Tmp.Value);
 		}
 
-		Request->SetVerb(ReHttpDebugHTTP::FHTTP::HTTPVerbToString(VerbType));
+		Request->SetVerb(REHTTPDEBUGHTTP::FHTTP::HTTPVerbToString(VerbType));
 
 		if (InBytes.Num() > 0)
 		{
@@ -120,17 +120,17 @@ namespace ReHttpDebugHTTP
 		return RequestID;
 	}
 
-	FString FHTTP::HTTPVerbToString(ReHttpDebugHTTP::EHTTPVerbType InVerbType)
+	FString FHTTP::HTTPVerbToString(REHTTPDEBUGHTTP::EHTTPVerbType InVerbType)
 	{
 		switch (InVerbType)
 		{
-		case ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_POST:
+		case REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_POST:
 			return TEXT("POST");
-		case ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_PUT:
+		case REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_PUT:
 			return TEXT("PUT");
-		case ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_GET:
+		case REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_GET:
 			return TEXT("GET");
-		case ReHttpDebugHTTP::EHTTPVerbType::HOTUPDATE_DELETE:
+		case REHTTPDEBUGHTTP::EHTTPVerbType::HOTUPDATE_DELETE:
 			return TEXT("DELETE");
 		}
 
