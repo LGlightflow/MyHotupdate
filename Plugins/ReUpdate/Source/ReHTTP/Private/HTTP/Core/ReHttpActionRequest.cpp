@@ -1,4 +1,4 @@
-﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿
 
 #include "HTTP/Core/ReHttpActionRequest.h"
 #include "Client/HTTPClient.h"

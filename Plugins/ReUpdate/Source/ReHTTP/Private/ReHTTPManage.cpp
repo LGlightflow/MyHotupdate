@@ -1,4 +1,4 @@
-﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿
 #include "ReHTTPManage.h"
 #include "HTTP/ReHttpActionMultpleRequest.h"
 #include "HTTP/ReHttpActionSingleRequest.h"

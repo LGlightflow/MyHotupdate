@@ -1,4 +1,4 @@
-﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿
 /*
  /* The following website explains how to use this set of plug-ins
  * DocURL：			    https://zhuanlan.zhihu.com/p/78023533
