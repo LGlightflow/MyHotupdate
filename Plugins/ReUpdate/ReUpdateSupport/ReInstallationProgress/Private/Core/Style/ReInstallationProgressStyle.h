@@ -1,11 +1,11 @@
-// Copyright (C) RenZhai.2021.All Rights Reserved.
+﻿// Copyright (C) RenZhai.2021.All Rights Reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "Styling/SlateStyle.h"
 
-class FSimpleInstallationProgressStyle
+class FReInstallationProgressStyle
 {
 public:
 	static void Initialize();

@@ -1,10 +1,10 @@
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SimpleInstallationProgressType.h"
+#include "ReInstallationProgressType.h"
 
-namespace SimpleInstallation
+namespace ReInstallation
 {
 	void Run();
 	void InitCommandInstallationProgress();

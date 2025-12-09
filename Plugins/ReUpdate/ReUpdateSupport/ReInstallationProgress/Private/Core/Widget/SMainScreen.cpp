@@ -1,10 +1,10 @@
-#include "SMainScreen.h"
+﻿#include "SMainScreen.h"
 #include "Widgets/Images/SImage.h"
 #include "Widgets/SBoxPanel.h"
 #include "Widgets/Notifications/SProgressBar.h"
 #include "Widgets/Text/STextBlock.h"
-#include "SimpleInstallationProgressType.h"
-#include "Core/Style/SimpleInstallationProgressStyle.h"
+#include "ReInstallationProgressType.h"
+#include "Core/Style/ReInstallationProgressStyle.h"
 
 #define LOCTEXT_NAMESPACE "SMainScreen"
 
@@ -18,7 +18,7 @@ void SMainScreen::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			SNew(SImage)
-			.Image(FSimpleInstallationProgressStyle::Get().GetBrush("SimpleInstallationProgressStyle.Background"))
+			.Image(FReInstallationProgressStyle::Get().GetBrush("ReInstallationProgressStyle.Background"))
 		]
 
 		+ SOverlay::Slot()

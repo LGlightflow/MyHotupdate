@@ -1,11 +1,11 @@
-// Copyright (C) RenZhai.2021.All Rights Reserved.
-#include "SimpleInstallationProgressStyle.h"
+﻿// Copyright (C) RenZhai.2021.All Rights Reserved.
+#include "ReInstallationProgressStyle.h"
 #include "Framework/Application/SlateApplication.h"
 #include "Styling/SlateStyleRegistry.h"
 
-TSharedPtr< FSlateStyleSet > FSimpleInstallationProgressStyle::StyleInstance = NULL;
+TSharedPtr< FSlateStyleSet > FReInstallationProgressStyle::StyleInstance = NULL;
 
-void FSimpleInstallationProgressStyle::Initialize()
+void FReInstallationProgressStyle::Initialize()
 {
 	if (!StyleInstance.IsValid())
 	{
@@ -14,14 +14,14 @@ void FSimpleInstallationProgressStyle::Initialize()
 	}
 }
 
-void FSimpleInstallationProgressStyle::Shutdown()
+void FReInstallationProgressStyle::Shutdown()
 {
 	FSlateStyleRegistry::UnRegisterSlateStyle(*StyleInstance);
 	ensure(StyleInstance.IsUnique());
 	StyleInstance.Reset();
 }
 
-void FSimpleInstallationProgressStyle::ReloadTextures()
+void FReInstallationProgressStyle::ReloadTextures()
 {
 	if (FSlateApplication::IsInitialized())
 	{
@@ -29,28 +29,28 @@ void FSimpleInstallationProgressStyle::ReloadTextures()
 	}
 }
 
-const ISlateStyle& FSimpleInstallationProgressStyle::Get()
+const ISlateStyle& FReInstallationProgressStyle::Get()
 {
 	return *StyleInstance;
 }
 
-FName FSimpleInstallationProgressStyle::GetStyleSetName()
+FName FReInstallationProgressStyle::GetStyleSetName()
 {
-	static FName StyleSetName(TEXT("SimpleInstallationProgressStyle"));
+	static FName StyleSetName(TEXT("ReInstallationProgressStyle"));
 	return StyleSetName;
 }
 
 #define IMAGE_BRUSH( RelativePath, ... ) FSlateImageBrush( Style->RootToContentDir( RelativePath, TEXT(".png") ), __VA_ARGS__ )
 
 const FVector2D Icon1920x1080(1920.0f, 1080.0f);
-TSharedRef<class FSlateStyleSet> FSimpleInstallationProgressStyle::Create()
+TSharedRef<class FSlateStyleSet> FReInstallationProgressStyle::Create()
 {
 	FString ProgressPath = FPaths::ConvertRelativePathToFull(FPaths::ProjectDir() / TEXT("Resources"));
-	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("SimpleInstallationProgressStyle"));
+	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("ReInstallationProgressStyle"));
 	
 	Style->SetContentRoot(ProgressPath);
 
-	Style->Set("SimpleInstallationProgressStyle.Background", new IMAGE_BRUSH(TEXT("1080x1920"), Icon1920x1080));
+	Style->Set("ReInstallationProgressStyle.Background", new IMAGE_BRUSH(TEXT("1080x1920"), Icon1920x1080));
 
 	return Style;
 }

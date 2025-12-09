@@ -1,7 +1,7 @@
-#include "SimpleInstallationProgress.h"
+﻿#include "ReInstallationProgress.h"
 #include "UnixCommonStartup.h"
 
 int main(int argc, char* argv[])
 {
-	return CommonUnixMain(argc, argv, &RunSimpleInstallationProgress);
+	return CommonUnixMain(argc, argv, &RunReInstallationProgress);
 }

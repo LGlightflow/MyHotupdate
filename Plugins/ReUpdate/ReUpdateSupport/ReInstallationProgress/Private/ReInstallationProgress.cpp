@@ -1,26 +1,26 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "SimpleInstallationProgress.h"
+#include "ReInstallationProgress.h"
 #include "RequiredProgramMainCPPInclude.h"
 #include "StandaloneRenderer.h"
 #include "Core/Widget/SMainScreen.h"
 #include "ThreadManage.h"
-#include "SimpleInstallationProgressType.h"
-#include "Core/Installation/SimpleInstallation.h"
-#include "Core/Log/SimpleInstallationProgressLog.h"
-#include "Core/Style/SimpleInstallationProgressStyle.h"
+#include "ReInstallationProgressType.h"
+#include "Core/Installation/ReInstallation.h"
+#include "Core/Log/ReInstallationProgressLog.h"
+#include "Core/Style/ReInstallationProgressStyle.h"
 
-IMPLEMENT_APPLICATION(SimpleInstallationProgress, "SimpleInstallationProgress");
+IMPLEMENT_APPLICATION(ReInstallationProgress, "ReInstallationProgress");
 
-#define LOCTEXT_NAMESPACE "SimpleInstallationProgress"
+#define LOCTEXT_NAMESPACE "ReInstallationProgress"
 
-int32 RunSimpleInstallationProgress(const TCHAR* CommandLine)
+int32 RunReInstallationProgress(const TCHAR* CommandLine)
 {
 	//I.引擎初始化
 	GEngineLoop.PreInit(CommandLine);
 
 	//II.命令初始化
-	SimpleInstallation::InitCommandInstallationProgress();
+	ReInstallation::InitCommandInstallationProgress();
 
 	//III.UObject对象初始化
 	ProcessNewlyLoadedUObjects();
@@ -33,16 +33,16 @@ int32 RunSimpleInstallationProgress(const TCHAR* CommandLine)
 	FSlateApplication::InitHighDPI(true);
 
 	//V.初始化我们的资源
-	FSimpleInstallationProgressStyle::Initialize();
-	FSimpleInstallationProgressStyle::ReloadTextures();
+	FReInstallationProgressStyle::Initialize();
+	FReInstallationProgressStyle::ReloadTextures();
 
 	//VI.生成自定义的画面
-	SimpleInstallation::SpawnInstallationProgressUI();
+	ReInstallation::SpawnInstallationProgressUI();
 
 	//VII.异步运行资源的拷贝
 	GThread::Get()->GetProxy().CreateLambda([&]()
 	{
-		SimpleInstallation::Run();
+		ReInstallation::Run();
 	});
 
 	//VII.渲染和Tick
@@ -50,7 +50,7 @@ int32 RunSimpleInstallationProgress(const TCHAR* CommandLine)
 	{
 		BeginExitIfRequested();
 		FTaskGraphInterface::Get().ProcessThreadUntilIdle(ENamedThreads::GameThread);
-		FTicker::GetCoreTicker().Tick(FApp::GetDeltaTime());
+		FTSTicker::GetCoreTicker().Tick(FApp::GetDeltaTime());
 		FSlateApplication::Get().PumpMessages();
 		FSlateApplication::Get().Tick();
 		GThread::Get()->Tick(FApp::GetDeltaTime());
@@ -59,7 +59,7 @@ int32 RunSimpleInstallationProgress(const TCHAR* CommandLine)
 	}
 
 	//VIII.结束引擎
-	FSimpleInstallationProgressStyle::Shutdown();
+	FReInstallationProgressStyle::Shutdown();
 	FCoreDelegates::OnExit.Broadcast();
 	FSlateApplication::Shutdown();
 	FModuleManager::Get().UnloadModulesAtShutdown();

@@ -863,4 +863,4 @@ private:
 	FOSS OSS;
 };
 
-#define Re_OSS FReOSSManage::Get()->GetOSS()
+#define RE_OSS FReOSSManage::Get()->GetOSS()

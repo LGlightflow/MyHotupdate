@@ -11,7 +11,7 @@ public class ReInstallationProgressTarget : TargetRules
 		Type = TargetType.Program;
 		LinkType = TargetLinkType.Monolithic;
 		LaunchModuleName = "ReInstallationProgress";
-		ExtraModuleNames.Add("EditorStyle");
+		//ExtraModuleNames.Add("EditorStyle");
 
 		// Lean and mean
 		bBuildDeveloperTools = true;

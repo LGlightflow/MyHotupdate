@@ -1,11 +1,11 @@
-// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
 
 #include "OSSObjectStorageClient.h"
 
 #include "RequiredProgramMainCPPInclude.h"
-#include "SimpleOSSManage.h"
+#include "ReOSSManage.h"
 #include "OSSObjectStorageClientMacro.h"
-#include "Protocol/SimpleHotUpdateProtocol.h"
+#include "Protocol/ReUpdateProtocol.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogOSSObjectStorageClient, Log, All);
 
@@ -28,7 +28,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 	};
 
 	//获取协议号
-	ESimpleHotUpdateProtocol Protocol = (ESimpleHotUpdateProtocol)FCString::Atoi(*GetParseValue(TEXT("-Protocol=")));
+	EReUpdateProtocol Protocol = (EReUpdateProtocol)FCString::Atoi(*GetParseValue(TEXT("-Protocol=")));
 
 	//账户
 	FString AccessKeyId = GetParseValue(TEXT("-AccessKeyId="));
@@ -50,21 +50,21 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 	bool bMainVersion = GetParseValue(TEXT("-bMainVersion=")).ToBool();
 
 	//账户初始化
-	SIMPLE_OSS.InitAccounts(AccessKeyId, AccessKeySecret, Endpoint);
+	RE_OSS.InitAccounts(AccessKeyId, AccessKeySecret, Endpoint);
 
-	if (SIMPLE_OSS.DoesBucketExist(Bucket))
+	if (RE_OSS.DoesBucketExist(Bucket))
 	{
 		switch (Protocol)
 		{
-			case ESimpleHotUpdateProtocol::SP_NONE_REQUEST:
+			case EReUpdateProtocol::SP_NONE_REQUEST:
 			{
-				exit((int32)ESimpleHotUpdateProtocol::SP_INVALID_RESPONSE);
+				exit((int32)EReUpdateProtocol::SP_INVALID_RESPONSE);
 				break;
 			}
-			case ESimpleHotUpdateProtocol::SP_PUT_TO_SERVER_REQUEST:
+			case EReUpdateProtocol::SP_PUT_TO_SERVER_REQUEST:
 			{
 				CHECK_OSS_LOCK_STATUS(
-					(int32)ESimpleHotUpdateProtocol::SP_SERVER_LOCKED_RESPONSE,
+					(int32)EReUpdateProtocol::SP_SERVER_LOCKED_RESPONSE,
 					Bucket, VersionLock, Platform, );
 
 				if (Bucket != TEXT("NONE"))
@@ -79,7 +79,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 					UE_LOG(LogOSSObjectStorageClient, Display, TEXT("new version.crc=%s"), *Version.Crc);
 					UE_LOG(LogOSSObjectStorageClient, Display, TEXT("new version.Name=%s"), *Version.Name);
 					
-					FString URL = TEXT("https://") + Bucket + TEXT(".") + SIMPLE_OSS.GetEndpoint();
+					FString URL = TEXT("https://") + Bucket + TEXT(".") + RE_OSS.GetEndpoint();
 					
 					UE_LOG(LogOSSObjectStorageClient, Display, TEXT("URL=%s"), *URL);
 					
@@ -107,7 +107,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 							//安装和主版本
 							{
 								RemoteDataDescribe->InstallationPath = InstallationPath;
-								RemoteDataDescribe->bMainVersion = bMainVersion;
+								RemoteDataDescribe->bMajorVersion = bMainVersion;
 							}
 
 							//大小
@@ -128,7 +128,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 
 							UE_LOG(LogOSSObjectStorageClient, Display, TEXT("Starting upload, please wait..."));
 
-							if (SIMPLE_OSS.PutObject(Bucket, FullPath, ObjectName))
+							if (RE_OSS.PutObject(Bucket, FullPath, ObjectName))
 							{
 								UE_LOG(LogOSSObjectStorageClient, Display, TEXT("PutObject %s succeeded"), *Bucket);
 								
@@ -146,7 +146,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 							{
 								UE_LOG(LogOSSObjectStorageClient, Error, TEXT("Upload %s fail."), *FPaths::ConvertRelativePathToFull(NewPath));
 								
-								exit((int32)ESimpleHotUpdateProtocol::SP_FAIL_RESPONSE);
+								exit((int32)EReUpdateProtocol::SP_FAIL_RESPONSE);
 							}
 						}
 					};
@@ -183,11 +183,11 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 
 				break;
 			}
-			case ESimpleHotUpdateProtocol::SP_UPLOAD_VERSION_INFORMATION_REQUEST:
+			case EReUpdateProtocol::SP_UPLOAD_VERSION_INFORMATION_REQUEST:
 			{
 				if (VersionJson.IsEmpty())
 				{
-					exit((int32)ESimpleHotUpdateProtocol::SP_CHECK_VERSION_INFO_IS_EMPTY_RESPONSE);
+					exit((int32)EReUpdateProtocol::SP_CHECK_VERSION_INFO_IS_EMPTY_RESPONSE);
 				}
 
 				if (OSSObjectStorageClientMethod::PutServerVersion(Bucket, ServerVersionName, Platform, VersionJson))
@@ -201,11 +201,11 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 
 				break;
 			}
-			case ESimpleHotUpdateProtocol::SP_CLOSE_LOCK_REQUEST:
+			case EReUpdateProtocol::SP_CLOSE_LOCK_REQUEST:
 			{
-				if (!SIMPLE_OSS.PutObjectByMemory(Bucket, Platform / VersionLock, TEXT("false")))
+				if (!RE_OSS.PutObjectByMemory(Bucket, Platform / VersionLock, TEXT("false")))
 				{
-					exit((int32)ESimpleHotUpdateProtocol::SP_CLOSE_LOCK_FAIL_RESPONSE);
+					exit((int32)EReUpdateProtocol::SP_CLOSE_LOCK_FAIL_RESPONSE);
 				}
 
 				break;
@@ -219,5 +219,5 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 
 	FEngineLoop::AppExit();
 
-	exit((int32)ESimpleHotUpdateProtocol::SP_OK_RESPONSE);
+	exit((int32)EReUpdateProtocol::SP_OK_RESPONSE);
 }

@@ -133,7 +133,7 @@ FReOSSManage * FReOSSManage::Get()
 		* Provide a local initialization account function, which needs to be configured in the project configuration.
 		* For details, please refer to " ../../../Projectname/Config/OssLoadAccountsSettings.ini"
 		*/
-		Re_OSS.InitLocalAccounts();
+		RE_OSS.InitLocalAccounts();
 	}
 
 	return ReOSS;
@@ -310,7 +310,7 @@ EAcl GetAcl(ANSICHAR *ACLChar,const FString &InBucketName = "")
 	{
 		if (!InBucketName.IsEmpty())
 		{
-			return Re_OSS.GetBucketAcl(InBucketName);
+			return RE_OSS.GetBucketAcl(InBucketName);
 		}	
 	}
 

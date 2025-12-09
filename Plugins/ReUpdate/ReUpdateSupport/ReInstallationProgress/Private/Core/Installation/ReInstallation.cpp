@@ -1,13 +1,13 @@
-#include "SimpleInstallation.h"
-#include "Core/Log/SimpleInstallationProgressLog.h"
+﻿#include "ReInstallation.h"
+#include "Core/Log/ReInstallationProgressLog.h"
 #include "Core/Widget/SMainScreen.h"
-#include "SimpleInstallationProgressType.h"
+#include "ReInstallationProgressType.h"
 
 float PakNumber = 0.f;
 float CustomPakNumber = 0.f;
 float LastFraction = 0.f;
 float PercentageInterval = 0.f;
-namespace SimpleInstallation
+namespace ReInstallation
 {
 	struct FInstallationProgress :public FCopyProgress
 	{
@@ -40,25 +40,25 @@ namespace SimpleInstallation
 	{
 		if (IFileManager::Get().Delete(NewFilename))
 		{
-			UE_LOG(LogSimpleInstallationProgress, Display, TEXT("Delete = [%s] Success."), NewFilename);
+			UE_LOG(LogReInstallationProgress, Display, TEXT("Delete = [%s] Success."), NewFilename);
 		}
 		else
 		{
-			UE_LOG(LogSimpleInstallationProgress, Error, TEXT("Delete = [%s] Fail."), NewFilename);
+			UE_LOG(LogReInstallationProgress, Error, TEXT("Delete = [%s] Fail."), NewFilename);
 		}
 	}
 
 	void Run()
 	{
 		//I.检测游戏是否还在运行
-		UE_LOG(LogSimpleInstallationProgress, Display, TEXT("1. Check if the game is still running."));
+		UE_LOG(LogReInstallationProgress, Display, TEXT("1. Check if the game is still running."));
 		while (FPlatformProcess::IsApplicationRunning(ProjectProcessID))
 		{
 			FPlatformProcess::Sleep(1.f);
 		}
 
 		//II.资源遍历
-		UE_LOG(LogSimpleInstallationProgress, Display, TEXT("2. Resource traversal."));
+		UE_LOG(LogReInstallationProgress, Display, TEXT("2. Resource traversal."));
 		TArray<FString> FoundFiles;
 		if (!ResourcesToCopied.IsEmpty())
 		{
@@ -95,10 +95,10 @@ namespace SimpleInstallation
 		TArray<FInstallationProgress*> InstallationProgressArray;
 
 		//III.资源拷贝
-		UE_LOG(LogSimpleInstallationProgress, Display, TEXT("3. Resource copy."));
+		UE_LOG(LogReInstallationProgress, Display, TEXT("3. Resource copy."));
 		for (auto &Tmp : FoundFiles)
 		{
-			UE_LOG(LogSimpleInstallationProgress, Display, TEXT("Resource = [%s]"),*Tmp);
+			UE_LOG(LogReInstallationProgress, Display, TEXT("Resource = [%s]"),*Tmp);
 			FString TargetPath = ProjectToContentPaks / FPaths::GetCleanFilename(Tmp);
 			FInstallationProgress *InstallationProgress = new FInstallationProgress();
 			IFileManager::Get().Copy(*TargetPath,*Tmp,true,false,false, InstallationProgress);
@@ -108,10 +108,10 @@ namespace SimpleInstallation
 		}
 
 		//自定义拷贝
-		UE_LOG(LogSimpleInstallationProgress, Display, TEXT("3.Custom Resource copy."));
+		UE_LOG(LogReInstallationProgress, Display, TEXT("3.Custom Resource copy."));
 		for (auto &Tmp : CustomCopyPaths)
 		{
-			UE_LOG(LogSimpleInstallationProgress, Display, TEXT("From [%s] => [%s]"),*Tmp.From,*Tmp.To);
+			UE_LOG(LogReInstallationProgress, Display, TEXT("From [%s] => [%s]"),*Tmp.From,*Tmp.To);
 			FInstallationProgress* InstallationProgress = new FInstallationProgress();
 			IFileManager::Get().Copy(*Tmp.To, *Tmp.From, true, false, false, InstallationProgress);
 		
@@ -121,7 +121,7 @@ namespace SimpleInstallation
 		if (PakNumber != 0 || CustomPakNumber != 0)
 		{
 			//IV.检测百分比的变化
-			UE_LOG(LogSimpleInstallationProgress, Display, TEXT("4. Delete temporary package."));
+			UE_LOG(LogReInstallationProgress, Display, TEXT("4. Delete temporary package."));
 			while (!FMath::IsNearlyEqual(ProgressInstallationPercentage, 1.f, 0.001f) && !IsEngineExitRequested())
 			{
 				FPlatformProcess::Sleep(1.f);
@@ -130,12 +130,12 @@ namespace SimpleInstallation
 
 		if (IsEngineExitRequested())
 		{
-			UE_LOG(LogSimpleInstallationProgress, Display, TEXT("5. Program forced exit."));
+			UE_LOG(LogReInstallationProgress, Display, TEXT("5. Program forced exit."));
 			return;
 		}
 
 		//V.删除临时包
-		UE_LOG(LogSimpleInstallationProgress, Display, TEXT("5. Delete temporary package."));
+		UE_LOG(LogReInstallationProgress, Display, TEXT("5. Delete temporary package."));
 		for (auto& Tmp : FoundFiles)
 		{
 			DeleteFile(*Tmp);
@@ -171,15 +171,15 @@ namespace SimpleInstallation
 		}
 
 		//V.启动程序
-		UE_LOG(LogSimpleInstallationProgress, Display, TEXT("5. Start project."));
+		UE_LOG(LogReInstallationProgress, Display, TEXT("5. Start project."));
 		FProcHandle ProjectHandle = FPlatformProcess::CreateProc(*ProjectStartupPath, nullptr, false, false, false, nullptr, 0, nullptr, nullptr);
 		if (ProjectHandle.IsValid())
 		{
-			UE_LOG(LogSimpleInstallationProgress, Display, TEXT("Project started successfully."));
+			UE_LOG(LogReInstallationProgress, Display, TEXT("Project started successfully."));
 		}
 		else
 		{
-			UE_LOG(LogSimpleInstallationProgress, Error, TEXT("Failed to start project."));
+			UE_LOG(LogReInstallationProgress, Error, TEXT("Failed to start project."));
 		}
 
 		FPlatformMisc::RequestExit(true);
@@ -192,7 +192,7 @@ namespace SimpleInstallation
 		T Value;
 		if (!FParse::Value(FCommandLine::Get(), *InKey, Value))
 		{
-			UE_LOG(LogSimpleInstallationProgress, Error, TEXT("%s was not found value"), *InKey);
+			UE_LOG(LogReInstallationProgress, Error, TEXT("%s was not found value"), *InKey);
 		}
 
 		return Value;
@@ -229,7 +229,7 @@ namespace SimpleInstallation
 		for (auto &Tmp : Jsons)
 		{
 			auto &RDD = DiscardInfo.AddDefaulted_GetRef();
-			SimpleVersionControl::Read(Tmp,RDD);
+			ReVersionControl::Read(Tmp,RDD);
 		}
 	}
 

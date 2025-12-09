@@ -1,18 +1,18 @@
-// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
 #include "OSSObjectStorageClientMethod.h"
-#include "SimpleOSSManage.h"
-//#include "Version/SimpleVersion.h"
+#include "ReOSSManage.h"
+//#include "Version/ReVersion.h"
 
 namespace OSSObjectStorageClientMethod
 {
 	EOSSLockType IsLockOSSServer(const FString& InBucketName, const FString& InVersionLockPath, const FString& InPlatform)
 	{
 		FString LockBuffer = TEXT("False");
-		if (SIMPLE_OSS.GetObjectToMemory(InBucketName, InPlatform / InVersionLockPath, LockBuffer))
+		if (RE_OSS.GetObjectToMemory(InBucketName, InPlatform / InVersionLockPath, LockBuffer))
 		{
 			return LockBuffer.ToBool() == true ? EOSSLockType::OSS_TRUE : EOSSLockType::OSS_FALSE;
 		}
-		else if (SIMPLE_OSS.PutObjectByMemory(InBucketName, InPlatform / InVersionLockPath, LockBuffer))
+		else if (RE_OSS.PutObjectByMemory(InBucketName, InPlatform / InVersionLockPath, LockBuffer))
 		{
 			return EOSSLockType::OSS_FALSE;
 		}
@@ -20,7 +20,7 @@ namespace OSSObjectStorageClientMethod
 		{
 			FGraphEventRef EventRef = FFunctionGraphTask::CreateAndDispatchWhenReady([]()
 			{
-				FMessageDialog::Open(EAppMsgType::Ok, NSLOCTEXT("FSimpleVersionControlEditorModule", "Error_GetObjectToServer", "Unable to obtain lock, wrong OSS password or account, unable to access OSS server ."));
+				FMessageDialog::Open(EAppMsgType::Ok, NSLOCTEXT("FReVersionControlEditorModule", "Error_GetObjectToServer", "Unable to obtain lock, wrong OSS password or account, unable to access OSS server ."));
 			},
 			TStatId(),
 			NULL,
@@ -33,9 +33,9 @@ namespace OSSObjectStorageClientMethod
 	bool GetServerVersion(const FString& InBucketName, const FString& InServerVersionName, const FString& Platform, FVersion& InVersion)
 	{
 		FString JsonData;
-		if (SIMPLE_OSS.GetObjectToMemory(InBucketName, Platform / InServerVersionName, JsonData))
+		if (RE_OSS.GetObjectToMemory(InBucketName, Platform / InServerVersionName, JsonData))
 		{
-			return SimpleVersionControl::Read(JsonData, InVersion);
+			return ReVersionControl::Read(JsonData, InVersion);
 		}
 
 		return false;
@@ -46,7 +46,7 @@ namespace OSSObjectStorageClientMethod
 		if (InVersion.Content.Num())
 		{
 			FString JsonString;
-			SimpleVersionControl::Save(InVersion, JsonString);
+			ReVersionControl::Save(InVersion, JsonString);
 
 			return PutServerVersion(InBucketName, InServerVersionName, Platform, JsonString);
 		}
@@ -56,7 +56,7 @@ namespace OSSObjectStorageClientMethod
 
 	bool PutServerVersion(const FString& InBucketName, const FString& InServerVersionName, const FString& Platform, const FString& InVersion)
 	{
-		return SIMPLE_OSS.PutObjectByMemory(InBucketName, Platform / InServerVersionName, InVersion);
+		return RE_OSS.PutObjectByMemory(InBucketName, Platform / InServerVersionName, InVersion);
 	}
 
 	FOSSLock::FOSSLock(const FString& InBucketName, const FString& InVersionLockPath, const FString& InPlatform)
@@ -69,7 +69,7 @@ namespace OSSObjectStorageClientMethod
 		if (OSSType == EOSSLockType::OSS_FALSE)
 		{
 			FString LockBuffer = TEXT("True");
-			if (SIMPLE_OSS.PutObjectByMemory(BucketName, Platform / VersionLockPath, LockBuffer))
+			if (RE_OSS.PutObjectByMemory(BucketName, Platform / VersionLockPath, LockBuffer))
 			{
 
 			}
@@ -82,7 +82,7 @@ namespace OSSObjectStorageClientMethod
 		if (OSSType == EOSSLockType::OSS_TRUE)
 		{
 			FString LockBuffer = TEXT("False");
-			if (SIMPLE_OSS.PutObjectByMemory(BucketName, Platform / VersionLockPath, LockBuffer))
+			if (RE_OSS.PutObjectByMemory(BucketName, Platform / VersionLockPath, LockBuffer))
 			{
 
 			}

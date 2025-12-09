@@ -1,4 +1,4 @@
-// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
 
 using UnrealBuildTool;
 
@@ -14,7 +14,7 @@ public class OSSObjectStorageClient : ModuleRules
 		PrivateDependencyModuleNames.Add("Projects");
 		PrivateDependencyModuleNames.Add("CoreUObject");
 		PrivateDependencyModuleNames.Add("ApplicationCore");
-		PrivateDependencyModuleNames.Add("SimpleOSS"); 
-		PrivateDependencyModuleNames.Add("SimpleHotObject");
+		PrivateDependencyModuleNames.Add("ReOSS"); 
+		PrivateDependencyModuleNames.Add("ReObject");
 	}
 }

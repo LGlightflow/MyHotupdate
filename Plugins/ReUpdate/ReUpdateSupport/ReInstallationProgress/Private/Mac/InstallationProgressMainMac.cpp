@@ -1,4 +1,4 @@
-#include "SimpleInstallationProgress.h"
+﻿#include "ReInstallationProgress.h"
 #include "HAL/ExceptionHandling.h"
 #include "Mac/CocoaThread.h"
 
@@ -23,7 +23,7 @@ static FString GSavedCommandLine;
 	FPlatformMisc::SetGracefulTerminationHandler();
 	FPlatformMisc::SetCrashHandler(nullptr);
 
-	RunSimpleInstallationProgress(*GSavedCommandLine);
+	RunReInstallationProgress(*GSavedCommandLine);
 
 	[NSApp terminate : self] ;
 }

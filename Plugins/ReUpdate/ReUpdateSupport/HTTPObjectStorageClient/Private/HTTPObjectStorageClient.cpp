@@ -1,12 +1,12 @@
-// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
 
 #include "HTTPObjectStorageClient.h"
-#include "SimpleHttpManage.h"
+#include "ReHttpManage.h"
 #include "RequiredProgramMainCPPInclude.h"
-#include "SimpleHTTPType.h"
+#include "ReHTTPType.h"
 #include "HTTPObjectStorageClientLog.h"
 #include "HTTPObjectStorageClientMethod.h"
-#include "Protocol/SimpleHotUpdateProtocol.h"
+#include "Protocol/ReUpdateProtocol.h"
 #include "Async/Async.h"
 
 using namespace HTTPObjectStorageClientMethod;
@@ -26,7 +26,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 	FString VersionName = GetParseValue(TEXT("-VersionName="));
 
 	//获取协议号
-	ESimpleHotUpdateProtocol Protocol = (ESimpleHotUpdateProtocol)FCString::Atoi(*GetParseValue(TEXT("-Protocol=")));
+	EReUpdateProtocol Protocol = (EReUpdateProtocol)FCString::Atoi(*GetParseValue(TEXT("-Protocol=")));
 	
 	FString Bucket = GetParseValue(TEXT("-Bucket="));
 	FString PatchVersionLogName = GetParseValue(TEXT("-PatchVersionLogName="));
@@ -53,17 +53,17 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 	-ServerVersionName=Version/ServerVersion.con 
 	-VersionLock=Version/MutexVersion.con 
 	-platform=windows 
-	-PakLocalPaths=P:/ReHotUpdate/Save/Pak/
+	-PakLocalPaths=P:/ReUpdate/Save/Pak/
 	*/
 
 	//测试
-	//FSimpleHTTPResponseDelegate Delegate;
+	//FReHTTPResponseDelegate Delegate;
 	//FString URL = TEXT("http://192.168.31.137");
 	//FString Save = FPaths::ProjectDir() / TEXT("wordpress-5.7.2.zip");
-	//SIMPLE_HTTP.GetObjectToLocal(Delegate, URL/TEXT("wordpress-5.7.2.zip"), Save);
+	//RE_HTTP.GetObjectToLocal(Delegate, URL/TEXT("wordpress-5.7.2.zip"), Save);
 	//FString LocalAsset = FPaths::ConvertRelativePathToFull( FPaths::ProjectDir() / TEXT("xxx1.zip"));
 
-	//SIMPLE_HTTP.PutObjectFromLocal(Delegate, URL / TEXT("xxx1.zip"), LocalAsset);
+	//RE_HTTP.PutObjectFromLocal(Delegate, URL / TEXT("xxx1.zip"), LocalAsset);
 
 	int32 ReturnValue = 0;
 	int32 UpdateFileNumber = 0;
@@ -71,16 +71,16 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 	//服务器版本
 	FVersion Version;
 
-	FSimpleHTTPResponseDelegate Delegate;	
+	FReHTTPResponseDelegate Delegate;	
 	switch (Protocol)
 	{
-		case ESimpleHotUpdateProtocol::SP_NONE_REQUEST:
+		case EReUpdateProtocol::SP_NONE_REQUEST:
 		{
 			//直接返回
-			exit((int32)ESimpleHotUpdateProtocol::SP_INVALID_RESPONSE);
+			exit((int32)EReUpdateProtocol::SP_INVALID_RESPONSE);
 			break;
 		}
-		case ESimpleHotUpdateProtocol::SP_PUT_TO_SERVER_REQUEST:
+		case EReUpdateProtocol::SP_PUT_TO_SERVER_REQUEST:
 		{
 			if (ReturnValue==0)
 			{
@@ -104,17 +104,17 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 					*RemovePathHead(VersionLock),
 					*Platform);
 
-				FSimpleHTTPResponseDelegate ResponseDelegate;
-				ResponseDelegate.SimpleCompleteDelegate.BindLambda(
+				FReHTTPResponseDelegate ResponseDelegate;
+				ResponseDelegate.ReCompleteDelegate.BindLambda(
 				[&](
-					const FSimpleHttpRequest &InHttpRequest,
-					const FSimpleHttpResponse &InHttpResponse, 
+					const FReHttpRequest &InHttpRequest,
+					const FReHttpResponse &InHttpResponse, 
 					bool bLink)
 				{
 					UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("bLink = %s"), bLink ? TEXT("True" : TEXT("False")));
 				});
 
-				SIMPLE_HTTP.PostRequest(*URL, *Prams, ResponseDelegate, true);
+				RE_HTTP.PostRequest(*URL, *Prams, ResponseDelegate, true);
 
 				UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("Hello World!!!!!!!"));
 
@@ -128,7 +128,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 				if (bLock)
 				{
 					UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("The http server is currently used by other operators."));
-					exit((int32)ESimpleHotUpdateProtocol::SP_SERVER_LOCKED_RESPONSE);
+					exit((int32)EReUpdateProtocol::SP_SERVER_LOCKED_RESPONSE);
 				}
 				else
 				{
@@ -139,7 +139,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 					{
 						if (Msg != TEXT("Error"))
 						{
-							SimpleVersionControl::Read(Msg, Version);
+							ReVersionControl::Read(Msg, Version);
 						}
 					});
 
@@ -151,8 +151,8 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 					UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("Get URL = %s"), *URL);
 
 					//单个对象上传成功
-					Delegate.SimpleCompleteDelegate.BindLambda(
-					[&](const FSimpleHttpRequest& InHttpRequest, const FSimpleHttpResponse& InHttpResponse, bool bLink)
+					Delegate.ReCompleteDelegate.BindLambda(
+					[&](const FReHttpRequest& InHttpRequest, const FReHttpResponse& InHttpResponse, bool bLink)
 					{
 						if (bLink)
 						{
@@ -181,7 +181,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 								//主版本和安装路径
 								{
 									RemoteDataDescribe->InstallationPath = InstallationPath;
-									RemoteDataDescribe->bMainVersion = bMainVersion;
+									RemoteDataDescribe->bMajorVersion = bMainVersion;
 								}
 
 								if (!bExists)
@@ -209,7 +209,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 						}
 						else
 						{
-							UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("Update %s is not OK."));
+							UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("Update %s is not OK."), *URL);
 						}
 
 						UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("URL = %s"),*URL);
@@ -217,8 +217,8 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 						UpdateFileNumber--;
 					});
 
-					Delegate.SimpleSingleRequestProgressDelegate.BindLambda(
-					[](const FSimpleHttpRequest& InRequest, int64 BytesSent, int64 BytesReceived)
+					Delegate.ReSingleRequestProgressDelegate.BindLambda(
+					[](const FReHttpRequest& InRequest, int64 BytesSent, int64 BytesReceived)
 					{
 						if (InRequest.ContentLength)
 						{
@@ -231,14 +231,14 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 					{
 						URL /= FPaths::GetCleanFilename(FilePath);
 
-						SIMPLE_HTTP.PutObjectFromLocal(Delegate, URL, FilePath);
+						RE_HTTP.PutObjectFromLocal(Delegate, URL, FilePath);
 
 						UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("Update To HTTP Server FilePath = %s.URL=%s"),*FilePath,*URL);
 					}
 					else if (PakLocalPaths != TEXT("NONE"))
 					{
 						//这种上传方式似乎有些问题 问题先放放，以后再解决
-						//SIMPLE_HTTP.PutObjectsFromLocal(Delegate, URL, PakLocalPaths);
+						//RE_HTTP.PutObjectsFromLocal(Delegate, URL, PakLocalPaths);
 
 						TArray<FString> FindPaths;
 						IFileManager::Get().FindFilesRecursive(FindPaths, *PakLocalPaths, TEXT("*"), true, false);
@@ -249,7 +249,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 						{
 							URL /= FPaths::GetCleanFilename(Tmp);
 
-							SIMPLE_HTTP.PutObjectFromLocal(Delegate, URL, Tmp);
+							RE_HTTP.PutObjectFromLocal(Delegate, URL, Tmp);
 						}						
 
 						UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("Update To HTTP Server PakLocalPaths = %s,URL=%s"), *PakLocalPaths, *URL);
@@ -267,11 +267,11 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 
 			break;
 		}
-		case ESimpleHotUpdateProtocol::SP_UPLOAD_VERSION_INFORMATION_REQUEST:
+		case EReUpdateProtocol::SP_UPLOAD_VERSION_INFORMATION_REQUEST:
 		{
 			if (VersionJson.IsEmpty())
 			{
-				exit((int32)ESimpleHotUpdateProtocol::SP_CHECK_VERSION_INFO_IS_EMPTY_RESPONSE);
+				exit((int32)EReUpdateProtocol::SP_CHECK_VERSION_INFO_IS_EMPTY_RESPONSE);
 			}
 
 			bool bLock = false;
@@ -284,7 +284,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 			if (bLock)
 			{
 				UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("The http server is currently used by other operators."));
-				exit((int32)ESimpleHotUpdateProtocol::SP_SERVER_LOCKED_RESPONSE);
+				exit((int32)EReUpdateProtocol::SP_SERVER_LOCKED_RESPONSE);
 			}
 			else
 			{
@@ -301,19 +301,19 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 				HTTPObjectStorageClientMethod::HTTPServerUnLock([&](bool)
 				{
 					UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("-------------Server unlock-----------"));
-					exit((int32)ESimpleHotUpdateProtocol::SP_OK_RESPONSE);
+					exit((int32)EReUpdateProtocol::SP_OK_RESPONSE);
 				});
 			}
 
 			break;
 		}
-		case ESimpleHotUpdateProtocol::SP_CLOSE_LOCK_REQUEST:
+		case EReUpdateProtocol::SP_CLOSE_LOCK_REQUEST:
 		{
 			//解锁
 			HTTPObjectStorageClientMethod::HTTPServerUnLock([](bool)
 			{
 				UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("-------------Server unlock-----------"));
-				exit((int32)ESimpleHotUpdateProtocol::SP_OK_RESPONSE);
+				exit((int32)EReUpdateProtocol::SP_OK_RESPONSE);
 			});
 			break;
 		}
@@ -345,7 +345,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 			{
 				UE_LOG(LogHTTPObjectStorageClient, Error, TEXT("Failed to unlock server."));
 			}
-			//exit((int32)ESimpleHotUpdateProtocol::SP_OK_RESPONSE);
+			//exit((int32)EReUpdateProtocol::SP_OK_RESPONSE);
 		});
 	};
 
@@ -356,7 +356,7 @@ INT32_MAIN_INT32_ARGC_TCHAR_ARGV()
 
 		double Now = FPlatformTime::Seconds();
 		float DeltaSenconds = Now - LastTime;
-		FSimpleHttpManage::Get()->Tick(DeltaSenconds);
+		FReHttpManage::Get()->Tick(DeltaSenconds);
 
 		if (UpdateFileNumber <= 0)
 		{

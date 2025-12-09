@@ -15,6 +15,6 @@ public class HTTPObjectStorageClient : ModuleRules
 		PrivateDependencyModuleNames.Add("CoreUObject");
 		PrivateDependencyModuleNames.Add("ApplicationCore");
 		PrivateDependencyModuleNames.Add("ReObject");
-		PrivateDependencyModuleNames.Add("SimpleHTTP");
+		PrivateDependencyModuleNames.Add("ReHTTP");
 	}
 }

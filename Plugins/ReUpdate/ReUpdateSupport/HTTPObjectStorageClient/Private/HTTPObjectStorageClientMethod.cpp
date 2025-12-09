@@ -1,8 +1,8 @@
-// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
 #include "HTTPObjectStorageClientMethod.h"
 #include "HTTPObjectStorageClientLog.h"
-#include "SimpleHttpManage.h"
-#include "SimpleHTTPType.h"
+#include "ReHttpManage.h"
+#include "ReHTTPType.h"
 
 namespace HTTPObjectStorageClientMethod
 {
@@ -42,9 +42,9 @@ namespace HTTPObjectStorageClientMethod
 
 		FString URL = TEXT("http://") + Endpoint / Bucket / Platform / ServerVersionName;
 
-		FSimpleHTTPResponseDelegate Delegate;
-		Delegate.SimpleCompleteDelegate.BindLambda(
-		[&,InFun](const FSimpleHttpRequest& InHttpRequest, const FSimpleHttpResponse& InHttpResponse, bool bLink)
+		FReHTTPResponseDelegate Delegate;
+		Delegate.ReCompleteDelegate.BindLambda(
+		[&,InFun](const FReHttpRequest& InHttpRequest, const FReHttpResponse& InHttpResponse, bool bLink)
 		{
 			if (bLink)
 			{
@@ -57,7 +57,7 @@ namespace HTTPObjectStorageClientMethod
 			}
 		});
 
-		if (!SIMPLE_HTTP.GetObjectToMemory(Delegate, URL,true))
+		if (!RE_HTTP.GetObjectToMemory(Delegate, URL,true))
 		{
 			UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("Get Server Version Fail!"));
 		}
@@ -71,9 +71,9 @@ namespace HTTPObjectStorageClientMethod
 		const FString Endpoint = GetParseValue(TEXT("-Endpoint="));
 
 		FString URL = TEXT("http://") + Endpoint / HTTPServerScriptPathName;
-		FSimpleHTTPResponseDelegate ResponseDelegate;
-		ResponseDelegate.SimpleCompleteDelegate.BindLambda(
-		[&](const FSimpleHttpRequest& InHttpRequest, const FSimpleHttpResponse& InHttpResponse, bool bLink)
+		FReHTTPResponseDelegate ResponseDelegate;
+		ResponseDelegate.ReCompleteDelegate.BindLambda(
+		[&](const FReHttpRequest& InHttpRequest, const FReHttpResponse& InHttpResponse, bool bLink)
 		{
 			UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("%s"), *InHttpResponse.ResponseMessage);
 			InFun(InHttpResponse.ResponseMessage.ToBool());
@@ -84,7 +84,7 @@ namespace HTTPObjectStorageClientMethod
 			InProtocol,
 			*(Bucket / Platform / VersionLock));
 
-		SIMPLE_HTTP.PostRequest(*URL, *Prams, ResponseDelegate,true);
+		RE_HTTP.PostRequest(*URL, *Prams, ResponseDelegate,true);
 	}
 
 	void PutServerVersion(const FString& ServerVersionJson, TFunction<void(bool)> InFun)
@@ -95,21 +95,21 @@ namespace HTTPObjectStorageClientMethod
 		const FString ServerVersionName = GetParseValue(TEXT("-ServerVersionName="));
 		FString URL = TEXT("http://") + Endpoint / Bucket/ Platform / ServerVersionName;
 
-		FSimpleHTTPResponseDelegate ResponseDelegate;
-		ResponseDelegate.SimpleCompleteDelegate.BindLambda(
-		[InFun](const FSimpleHttpRequest& InHttpRequest, const FSimpleHttpResponse& InHttpResponse, bool bLink)
+		FReHTTPResponseDelegate ResponseDelegate;
+		ResponseDelegate.ReCompleteDelegate.BindLambda(
+		[InFun](const FReHttpRequest& InHttpRequest, const FReHttpResponse& InHttpResponse, bool bLink)
 		{
 			UE_LOG(LogHTTPObjectStorageClient, Display, TEXT("%s"), *InHttpResponse.ResponseMessage);
 			InFun(bLink);
 		});
 
-		SIMPLE_HTTP.PutObjectFromString(ResponseDelegate, URL, ServerVersionJson,true);
+		RE_HTTP.PutObjectFromString(ResponseDelegate, URL, ServerVersionJson,true);
 	}
 
 	void PutServerVersion(const FVersion& ServerVersion, TFunction<void(bool)> InFun)
 	{
 		FString JsonString;
-		SimpleVersionControl::Save(ServerVersion, JsonString);
+		ReVersionControl::Save(ServerVersion, JsonString);
 
 		PutServerVersion(JsonString, InFun);
 	}

@@ -1,11 +1,11 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "SimpleInstallationProgress.h"
+#include "ReInstallationProgress.h"
 #include "IOS/IOSAppDelegate.h"
 #include "IOS/IOSCommandLineHelper.h"
 #include "IOS/SlateOpenGLESView.h"
-#include "Core/Style/SimpleInstallationProgressStyle.h"
-#include "Core/Installation/SimpleInstallation.h"
+#include "Core/Style/ReInstallationProgressStyle.h"
+#include "Core/Installation/ReInstallation.h"
 #import <UIKit/UIKit.h>
 
 #define IOS_MAX_PATH 1024
@@ -63,15 +63,15 @@ void FAppEntry::Init()
 
 	// Bring up the test suite.
 	{
-		SimpleInstallation::InitCommandInstallationProgress();
+		ReInstallation::InitCommandInstallationProgress();
 
 		//.初始化我们的资源
-		FSimpleInstallationProgressStyle::Initialize();
-		FSimpleInstallationProgressStyle::ReloadTextures();
+		FReInstallationProgressStyle::Initialize();
+		FReInstallationProgressStyle::ReloadTextures();
 
-		SimpleInstallation::SpawnInstallationProgressUI();
+		ReInstallation::SpawnInstallationProgressUI();
 
-		SimpleInstallation::Run();
+		ReInstallation::Run();
 	}
 
 #if WITH_SHARED_POINTER_TESTS
@@ -95,7 +95,7 @@ void FAppEntry::Tick()
 
 void FAppEntry::Shutdown()
 {
-	FSimpleInstallationProgressStyle::Shutdown();
+	FReInstallationProgressStyle::Shutdown();
 	FSlateApplication::Shutdown();
 }
 

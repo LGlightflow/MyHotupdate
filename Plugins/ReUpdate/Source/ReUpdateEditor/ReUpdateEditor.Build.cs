@@ -47,7 +47,6 @@ public class ReUpdateEditor : ModuleRules
 			{
 				"Projects",
 				"InputCore",
-				"EditorFramework",
 				"UnrealEd",
 				"ToolMenus",
 				"CoreUObject",

@@ -1,10 +1,10 @@
-// Copyright (C) RenZhai.2020.All Rights Reserved.
+﻿// Copyright (C) RenZhai.2020.All Rights Reserved.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "OSSObjectStorageClientType.h"
-#include "Version/SimpleVersion.h"
+#include "Version/ReVersion.h"
 
 namespace OSSObjectStorageClientMethod
 {

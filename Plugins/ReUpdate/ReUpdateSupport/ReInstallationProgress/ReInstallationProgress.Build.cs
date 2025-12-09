@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
 
@@ -16,7 +16,7 @@ public class ReInstallationProgress : ModuleRules
 		PrivateDependencyModuleNames.Add("Slate");
 		PrivateDependencyModuleNames.Add("SlateCore");
 		PrivateDependencyModuleNames.Add("StandaloneRenderer");
-		PrivateDependencyModuleNames.Add("SimpleThread");
-		PrivateDependencyModuleNames.Add("ReUpdate");
+		PrivateDependencyModuleNames.Add("ReThread");
+		PrivateDependencyModuleNames.Add("ReObject");
 	}
 }

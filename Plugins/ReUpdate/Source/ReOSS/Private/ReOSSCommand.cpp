@@ -45,7 +45,7 @@ namespace ReOSSCommand
 					return false;
 				}
 
-				Re_OSS.InitAccounts(AccessKeyId, AccessKeySecret, Endpoint);
+				RE_OSS.InitAccounts(AccessKeyId, AccessKeySecret, Endpoint);
 
 				return true;
 			}
@@ -57,7 +57,7 @@ namespace ReOSSCommand
 					return false;
 				}
 
-				return Re_OSS.DoesBucketExist(BucketName);
+				return RE_OSS.DoesBucketExist(BucketName);
 			}
 			case EReOSSCommand::OSS_OBJECT_EXIST:
 			{
@@ -73,7 +73,7 @@ namespace ReOSSCommand
 					return false;
 				}
 
-				return Re_OSS.DoesObjectExist(BucketName, ObjectName);
+				return RE_OSS.DoesObjectExist(BucketName, ObjectName);
 			}
 			case EReOSSCommand::OSS_COPY_OBJECT:
 			{
@@ -101,7 +101,7 @@ namespace ReOSSCommand
 					return false;
 				}
 					
-				return Re_OSS.CopyObject(SourceBucketName, SourceObjectName, CopyBucketName, CopyObjectNam);
+				return RE_OSS.CopyObject(SourceBucketName, SourceObjectName, CopyBucketName, CopyObjectNam);
 			}
 			case EReOSSCommand::OSS_DELETE_OBJECT:
 			{
@@ -117,7 +117,7 @@ namespace ReOSSCommand
 					return false;
 				}
 
-				return Re_OSS.DeleteObject(BucketName, ObjectName);
+				return RE_OSS.DeleteObject(BucketName, ObjectName);
 			}
 			case EReOSSCommand::OSS_GET_OBJECT:
 			{
@@ -140,7 +140,7 @@ namespace ReOSSCommand
 				}
 
 				FRange Range;
-				return Re_OSS.GetObjectToLocal(BucketName, ObjectName, LocalPaths, Range);
+				return RE_OSS.GetObjectToLocal(BucketName, ObjectName, LocalPaths, Range);
 			}
 			case EReOSSCommand::OSS_RESUMABLE_DOWNLOAD_OBJECT:
 			{
@@ -162,7 +162,7 @@ namespace ReOSSCommand
 					return false;
 				}
 
-				return Re_OSS.ResumableDownloadObject(BucketName, ObjectName, LocalPaths);
+				return RE_OSS.ResumableDownloadObject(BucketName, ObjectName, LocalPaths);
 			}
 			case EReOSSCommand::OSS_PUT_OBJECT:
 			{
@@ -185,7 +185,7 @@ namespace ReOSSCommand
 				}
 
 				TMap<FString, FString> OSSMeta;
-				return Re_OSS.PutObject(BucketName, LocalPaths, ObjectName, nullptr,OSSMeta);
+				return RE_OSS.PutObject(BucketName, LocalPaths, ObjectName, nullptr,OSSMeta);
 			}
 			case EReOSSCommand::OSS_RESUMABLE_UPLOAD_OBJECT:
 			{
@@ -208,7 +208,7 @@ namespace ReOSSCommand
 				}
 
 				TMap<FString, FString> OSSMeta;
-				return Re_OSS.ResumableUploadObject(BucketName, ObjectName, LocalPaths, 10485760,nullptr, OSSMeta);
+				return RE_OSS.ResumableUploadObject(BucketName, ObjectName, LocalPaths, 10485760,nullptr, OSSMeta);
 			}
 			case EReOSSCommand::OSS_UPLOAD_PART:
 			{
@@ -237,7 +237,7 @@ namespace ReOSSCommand
 				}
 				int32 PartSize = 1024 * 1024 * 10;
 				TMap<FString, FString> OSSMeta;
-				return Re_OSS.UploadPart(UploadId,BucketName, ObjectName, LocalPaths, PartSize, OSSMeta);
+				return RE_OSS.UploadPart(UploadId,BucketName, ObjectName, LocalPaths, PartSize, OSSMeta);
 			}
 		}
 
